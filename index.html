@@ -171,9 +171,52 @@
     display:inline-block;margin-top:10px;font-size:11px;
     color:var(--gold);letter-spacing:0.06em;
   }
+
+  #gate{
+    position:fixed;inset:0;z-index:100;
+    background:var(--cream);
+    display:flex;align-items:center;justify-content:center;
+    padding:28px;
+  }
+  #gate .box{
+    text-align:center;max-width:340px;width:100%;
+  }
+  #gate .eyebrow{display:block;margin-bottom:14px;}
+  #gate h2{
+    font-size:30px;color:var(--eucalyptus-deep);margin:0 0 26px;
+  }
+  #gate input{
+    width:100%;padding:12px 14px;margin-bottom:14px;
+    border:1px solid var(--eucalyptus-pale);background:var(--paper);
+    font-family:'Jost',sans-serif;font-size:14px;color:var(--ink);
+    border-radius:2px;text-align:center;letter-spacing:0.06em;
+  }
+  #gate button{
+    width:100%;padding:13px;background:var(--eucalyptus-deep);color:var(--paper);
+    border:none;font-family:'Jost',sans-serif;font-size:13px;
+    letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;
+    border-radius:2px;
+  }
+  #gate .error{
+    color:#D89B9B;font-size:13px;margin-top:12px;
+    visibility:hidden;
+  }
+  #site{display:none;}
 </style>
 </head>
 <body>
+
+<div id="gate">
+  <div class="box">
+    <span class="eyebrow">Nur für geladene Gäste</span>
+    <h2>Willkommen</h2>
+    <input type="password" id="gate-input" placeholder="Passwort" autocomplete="off">
+    <button id="gate-submit">Weiter</button>
+    <p class="error" id="gate-error">Falsches Passwort, bitte nochmal versuchen.</p>
+  </div>
+</div>
+
+<div id="site">
 
 <nav>
   <div class="wrap">
@@ -310,6 +353,32 @@
     <p>Bei Fragen: [E-Mail folgt]</p>
   </div>
 </footer>
+
+</div>
+
+<script>
+  var GATE_PASSWORD = "MarcIstToll";
+
+  var gate = document.getElementById('gate');
+  var site = document.getElementById('site');
+  var input = document.getElementById('gate-input');
+  var button = document.getElementById('gate-submit');
+  var error = document.getElementById('gate-error');
+
+  function tryUnlock(){
+    if(input.value === GATE_PASSWORD){
+      gate.style.display = 'none';
+      site.style.display = 'block';
+    } else {
+      error.style.visibility = 'visible';
+    }
+  }
+
+  button.addEventListener('click', tryUnlock);
+  input.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ tryUnlock(); }
+  });
+</script>
 
 </body>
 </html>
