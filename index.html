@@ -224,7 +224,7 @@
     <a href="#location">Location</a>
     <a href="#uebernachten">Übernachten</a>
     <a href="#dresscode">Dresscode</a>
-    <a href="#rsvp">Zusagen</a>
+    <a href="#rsvp">Antwort</a>
   </div>
 </nav>
 
@@ -325,16 +325,39 @@
 <section id="rsvp">
   <div class="wrap">
     <span class="eyebrow">Bitte bis 01.06.2027</span>
-    <h2>Zusagen</h2>
+    <h2>Antwort</h2>
     <p class="lead">So könnte eure Rückmeldung aussehen – aktuell noch ohne Funktion.</p>
     <form class="rsvp-form" onsubmit="return false;">
       <label for="name">Name</label>
       <input id="name" type="text" placeholder="Vor- und Nachname">
-      <label for="anzahl">Anzahl Personen</label>
+
+      <label for="anzahl">Anzahl Erwachsene</label>
       <select id="anzahl">
-        <option>1 Person</option>
-        <option>2 Personen</option>
+        <option value="1">1 Erwachsener</option>
+        <option value="2">2 Erwachsene</option>
       </select>
+
+      <div id="feld-person2" style="display:none;">
+        <label for="name2">Name Begleitung</label>
+        <input id="name2" type="text" placeholder="Vor- und Nachname">
+      </div>
+
+      <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:14px;margin-bottom:18px;">
+        <input type="checkbox" id="kinder-check" style="width:auto;margin:0;">
+        Ich bringe Kinder mit
+      </label>
+
+      <div id="feld-kinder-anzahl" style="display:none;">
+        <label for="kinder-anzahl">Anzahl Kinder</label>
+        <select id="kinder-anzahl">
+          <option value="1">1 Kind</option>
+          <option value="2">2 Kinder</option>
+          <option value="3">3 Kinder</option>
+        </select>
+      </div>
+
+      <div id="feld-kindernamen"></div>
+
       <label for="teilnahme">Teilnahme</label>
       <select id="teilnahme">
         <option>Ich komme gerne</option>
@@ -387,6 +410,43 @@
   input.addEventListener('keydown', function(e){
     if(e.key === 'Enter'){ tryUnlock(); }
   });
+
+  var anzahlSelect = document.getElementById('anzahl');
+  var feldPerson2 = document.getElementById('feld-person2');
+  anzahlSelect.addEventListener('change', function(){
+    feldPerson2.style.display = (anzahlSelect.value === '2') ? 'block' : 'none';
+  });
+
+  var kinderCheck = document.getElementById('kinder-check');
+  var feldKinderAnzahl = document.getElementById('feld-kinder-anzahl');
+  var kinderAnzahlSelect = document.getElementById('kinder-anzahl');
+  var feldKindernamen = document.getElementById('feld-kindernamen');
+
+  function renderKindernamen(){
+    var anzahl = parseInt(kinderAnzahlSelect.value, 10);
+    feldKindernamen.innerHTML = '';
+    for(var i = 1; i <= anzahl; i++){
+      var label = document.createElement('label');
+      label.textContent = 'Name Kind ' + i;
+      var input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = 'Vorname';
+      feldKindernamen.appendChild(label);
+      feldKindernamen.appendChild(input);
+    }
+  }
+
+  kinderCheck.addEventListener('change', function(){
+    var checked = kinderCheck.checked;
+    feldKinderAnzahl.style.display = checked ? 'block' : 'none';
+    if(checked){
+      renderKindernamen();
+    } else {
+      feldKindernamen.innerHTML = '';
+    }
+  });
+
+  kinderAnzahlSelect.addEventListener('change', renderKindernamen);
 </script>
 
 </body>
